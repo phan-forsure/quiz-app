@@ -16,8 +16,11 @@ import { useRef, useState } from "react";
 export default function TabsComponent() {
   const [name, setName] = useState<string | undefined>("");
   const [link, setLink] = useState<string | undefined>("");
+  const [quizName, setQuizName] = useState<string | undefined>("");
   const nameRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
+  const quizRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="flex w-full max-w-sm flex-col gap-6">
       <Tabs defaultValue="account">
@@ -35,8 +38,8 @@ export default function TabsComponent() {
                 <Label htmlFor="tabs-demo-name">Enter quiz link</Label>
                 <Input
                   ref={linkRef}
-                  onInput={() => setLink(linkRef.current?.value)}
-                  placeholder="http://friends-quiz/123"
+                  onInput={() => setLink(linkRef.current!.value)}
+                  placeholder="/123"
                 ></Input>
               </div>
               <div className="grid gap-3">
@@ -49,8 +52,8 @@ export default function TabsComponent() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>
-                <Link href={link!}>Start quiz</Link>
+              <Button disabled={!link}>
+                <Link href={link ?? "/"}>Start quiz</Link>
               </Button>
             </CardFooter>
           </Card>
@@ -63,11 +66,17 @@ export default function TabsComponent() {
             <CardContent className="grid gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="tabs-demo-current">Quiz name</Label>
-                <Input placeholder="My test"></Input>
+                <Input
+                  placeholder="My test"
+                  ref={quizRef}
+                  onInput={() => setQuizName(quizRef.current?.value)}
+                ></Input>
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="cursor-pointer">Start</Button>
+              <Button className="cursor-pointer" disabled={!quizName}>
+                Start
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
